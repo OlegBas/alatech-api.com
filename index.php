@@ -13,7 +13,7 @@ require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/web.php';
 
-$application = new yii\web\Application($config);
-$application->name = 'Alatech';
+(new yii\web\Application($config))->run();
+// $application->name = 'Alatech';
 
-$application->run();
+// $application->run();
