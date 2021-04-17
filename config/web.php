@@ -1,13 +1,6 @@
 <?php
 
-use app\bootstrap\CorsBootstrap;
-use app\models\authorization\User;
-use yii\filters\ContentNegotiator;
-use yii\filters\Cors;
 use yii\rest\UrlRule;
-use yii\web\JsonParser;
-use yii\web\JsonResponseFormatter;
-use yii\web\Request;
 use yii\web\Response;
 
 $params = require __DIR__ . '/params.php';
@@ -18,69 +11,50 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-        'contentNegotiator',
-        'cors',
         //CorsBootstrap::class,
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'language' => 'en',
+    // 'language' => 'en',
     'components' => [
-        'cors' => [
-            'class' => Cors::class,
-            'cors' => [
-                'Origin' => ['*'],
-                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                'Access-Control-Request-Headers' => ['*'],
-                'Access-Control-Allow-Credentials' => null,
-                'Access-Control-Max-Age' => 86400,
-                'Access-Control-Expose-Headers' => [],
-            ]
-        ],
-        'contentNegotiator' => [
-            'class' => ContentNegotiator::class,
-            'formats' => [
-                'application/json' => Response::FORMAT_JSON,
-            ],
-            'languages' => [
-                'en-US',
-            ],
-        ],
         'request' => [
-            'class' => Request::class,
+            //TODO learn-start
+            'class' => 'yii\web\Request',
+            //TODO learn-end
             'cookieValidationKey' => 'wFeScriKqPo9x92KRgkrpxSCjVlYffwZ',
+            //TODO learn-start
             'parsers' => [
-                'application/json' => JsonParser::class,
+                'application/json' => 'yii\web\JsonParser',
             ],
             'acceptableContentTypes' => [
                 'application/json' => 1
             ]
+            //TODO learn-end
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => User::class,
-            // Regular Session Authorization
-//            'enableAutoLogin' => true,
-//            'enableSession' => true
-            // Token-based Authorization
+            'identityClass' => 'app\models\authorization\User',
+            //TODO learn-start
             'enableAutoLogin' => false,
             'enableSession' => false,
-            'loginUrl' => 'api/v1/authorization/login',
+            //TODO learn-end
         ],
+        //TODO learn-start
         'response' => [
             'class' => Response::class,
             'format' => Response::FORMAT_JSON,
             'formatters' => [
                 Response::FORMAT_JSON => [
-                    'class' => JsonResponseFormatter::class,
+                    'class' => 'yii\web\JsonResponseFormatter',
                 ],
             ],
             'charset' => 'UTF-8',
         ],
+        //TODO learn-end
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -109,16 +83,6 @@ $config = [
                     'class' => UrlRule::class,
                     'controller' => 'alatech/api/login'
                 ],
-                [
-                    'class' => UrlRule::class,
-                    'controller' => 'alatech/api/logout'
-                ],
-                [
-                    'class' => UrlRule::class,
-                    'controller' => 'alatech/api/machines',
-                ],
-                'alatech/api/images/<id>' => 'alatech/api/images/index',
-                'alatech/api/search/<category>' => 'alatech/api/search/index'
             ],
         ],
     ],
